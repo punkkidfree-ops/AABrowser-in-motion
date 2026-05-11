@@ -1,0 +1,32 @@
+name: Gerar APK Atualizado
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout do código
+      uses: actions/checkout@v4 # Atualizado para v4
+
+    - name: Configurar Java
+      uses: actions/setup-java@v4 # Atualizado para v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: gradle
+
+    - name: Dar permissão ao Gradle
+      run: chmod +x gradlew
+
+    - name: Compilar APK de Debug
+      run: ./gradlew assembleDebug
+
+    - name: Upload do APK
+      uses: actions/upload-artifact@v4 # ESTA É A CORREÇÃO PARA O ERRO DA FOTO
+      with:
+        name: app-debug
+        path: |
+          **/build/outputs/apk/debug/*.apk
